@@ -62,6 +62,8 @@ class CypherExercise():
 
         # 删除所有的节点和关系
         q='match (p:Person) delete p'
+        # 删除所有孤立的点
+        q='MATCH (n) WHERE NOT (n)--() DELETE n'
         # 同时删除关系；这个查询适用于删除少量的数据，不适用于删除巨量的数据
         q='match (p:Person) detach delete p'
         # 删除一个节点及其所有的关系
@@ -102,7 +104,13 @@ class CypherExercise():
         q='match (p:Person)-[h:Has_Phone]->(ph:Phone)-[:Call]-(ph2:Phone) where p.name="张三" return p,h,ph,ph2'
 
         # 查询姓名2 和 姓名10 的最短路径
-        #  APOC  [*..10] 十度关系内
+        #  APOC  [*..10] 十度关系内,[:KNOWS*1..2] 认识的一度或者两度关系
+        # Cypher语言支持变长路径的模式，变长路径的表示方式是：[*N..M]，N和M表示路径长度的最小值和最大值。
+        # (a)-[*2]->(b)：表示路径长度为2，起始节点是a，终止节点是b；
+        # (a)-[*3..5]->(b)：表示路径长度的最小值是3，最大值是5，起始节点是a，终止节点是b；
+        # (a)-[*..5]->(b)：表示路径长度的最大值是5，起始节点是a，终止节点是b；
+        # (a)-[*3..]->(b)：表示路径长度的最小值是3，起始节点是a，终止节点是b；
+        # (a)-[*]->(b)：表示不限制路径长度，起始节点是a，终止节点是b；
         q='match (p1:Person{name:"姓名2"}), (p2:Person{name:"姓名10"}) p=shortestpath((p1)-[*..10]-(p2)) return p'
         # 查询姓名2 和 姓名10 的所有的最短路径
         q='match (p1:Person{name:"姓名2"}), (p2:Person{name:"姓名10"}) p=allshortestpaths((p1)-[*..10]-(p2)) return p'
@@ -118,7 +126,13 @@ class CypherExercise():
         # 利用with n.name 把传给了后面, 用collect 对名字重复的过滤
         q='MATCH (p:Person) with p.name AS Name, collect(p) AS nodes where size(nodes)>1 return nodes'
         q='MATCH (p:Person) with p.name AS Name, collect(p) AS nodes where size(nodes)>1 FOREACH(i in tail(nodes)|DETACH DELETE i) return i'
-    
+
+        # http://www.tastones.com/stackoverflow/neo4j/cypher/deletion/
+        #分页排序
+        q='Match (n:Person) RETURN n  ORDER BY n.name ASC Skip 1 limit 3'
+        # 以T 开头的电影
+        q='MATCH (actor:Person)-[:ACTED_IN]->(movie:Movie) WHERE movie.title STARTS WITH "T" RETURN movie.title AS title, collect(actor.name) AS cast ORDER BY title ASC LIMIT 10'
+
     def load_data_csv(self):
         #load node csv 
         command='USING PERIODIC COMMIT 1000 LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS csvLine CREATE (c:Contact { mobile:csvLine.mobile, name:csvLine.name, updateTime:csvLine.updateTime, createTime:csvLine.createTime })'
