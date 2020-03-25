@@ -24,22 +24,26 @@ class Solution:
                         res.add((nums[i],nums[j],nums[z]))
         return list(res)
     def threeSum2(self, nums: List[int]) -> List[List[int]]:        
-        #方法二用hashtable
+        #方法二 两边往中间夹
         if len(nums)<3:
             return []
         nums=sorted(nums)
+        print('sorted nums is {}'.format(nums))
         res=set()
-        dic=dict()
-        for i, v in enumerate(nums):
-            dic[v] =1
-        print(dic)
-        for i in range(len(nums)):
-            for j in range(i+1,len(nums)):
-                if 0-nums[i]-nums[j] in dic:
-                    print(0-nums[i]-nums[j] )
-                    print(nums[i],nums[j])
-                    print('----')
-                    res.add(tuple(sorted((nums[i],nums[j],0-nums[i]-nums[j]))))
+        for i,v in enumerate(nums):
+            # if i >= len(nums)-1: break
+            j = i +1
+            k = len(nums)-1
+            while j < k:
+                if nums[i] + nums[j] + nums[k] >0:
+                    k -= 1
+                elif nums[i] + nums[j] + nums[k] <0:
+                    j += 1
+                else:
+                    res.add((nums[i],nums[j],nums[k]))
+                    print(nums[i],nums[j],nums[k])
+                    j +=1
+                    k -=1
         return list(res)
       
 if __name__ == "__main__":
