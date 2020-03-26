@@ -39,7 +39,7 @@ def model_training(*args):
     X_train,X_test,y_train,y_test=args[0],args[1],args[2],args[3]
     print('model training began')
     parameters={'C':[0.000001,0.00001,0.0001,0.01,0.1,0.5,1,2,5,10]}
-    lr= LogisticRegression(solver='lbfgs',multi_class='auto')
+    lr= LogisticRegression(multi_class='auto')
     # lr= LogisticRegression(C=2)
     lr.fit(X_train,y_train)
     # 预测测试集
@@ -50,7 +50,7 @@ def model_training(*args):
     cr= classification_report(y_test,y_pred)
     print(cm,'\n',cr)
 
-    # 通过交叉验证, 指定最优解; cv 交叉验证参数,指定fold数量，默认为3
+    # 通过交叉验证, 指定最优解; cv 交叉验证参数,指定把数据分为几份，其中一份作为交叉验证集合，其余作为training集合，默认为3
     # scoring :准确度评价标准，默认None,这时需要使用score函数；或者如scoring='roc_auc'，根据所选模型不同，评价准则不同。字符串（函数名），或是可调用对象，需要其函数签名形如：scorer(estimator, X, y)；如果是None，则使用estimator的误差估计函数。
     # gsearch1=GridSearchCV(estimator=lr,param_grid=parameters,scoring='roc_auc',cv=10)
     #roc_auc 不支持分类数据
@@ -58,7 +58,8 @@ def model_training(*args):
     gsearch1.fit(X_train,y_train)
     gsearch1.score(X_test,y_test)
     print(gsearch1.cv_results_)
-    print(gsearch1.best_params_)
+    print(gsearch1.best_params_)  #最好的参数
+    print(gsearch1.best_estimator_) #最好的模型
     print(gsearch1.best_score_)
     # 上面打印出 交叉验证最好的C 为2
 
@@ -77,7 +78,8 @@ def model_training(*args):
     """
 
 if __name__ == "__main__":
-    path=Path(r'D:\GitRepository\KnowledgeGraph\NLP\data\EmotionData\ISEAR.csv')
+    root = Path.cwd()
+    path=root / r'KnowledgeGraph\NLP\data\EmotionData\ISEAR.csv'
     data=data_analyse(path)
     vector=feature_engineer(data)
     model_training(*vector)
