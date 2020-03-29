@@ -2,6 +2,10 @@ from pathlib import Path
 from nltk.corpus import reuters
 from collections import defaultdict
 import numpy as np
+
+"""
+拼写纠错的实现
+"""
 #构建词库
 def generate_vocab(path):
     vocab = set([line.strip() for line in open(vocab_path)])

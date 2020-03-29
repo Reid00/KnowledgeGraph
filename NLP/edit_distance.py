@@ -1,4 +1,4 @@
-
+import numpy as np
 def edit_dis(str1,str2):
     """
     基于动态规划求解编辑距离
@@ -7,7 +7,8 @@ def edit_dis(str1,str2):
     # m,n 分别是字符串的长度
     m,n=len(str1),len(str2)
     #构建一个二维数组来存储子问题
-    dp=[[0 for x in range(n+1)] for j in range(m+1)]
+    # dp=[[0 for x in range(n+1)] for j in range(m+1)]
+    dp=np.zeros((m+1,n+1))
 
     # 利用动态规划算法，填充数组
     for i in range(m+1):

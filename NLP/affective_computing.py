@@ -8,6 +8,10 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from pathlib import Path
 
+"""
+情感分类的实现
+"""
+
 def data_analyse(path):
     data=pd.read_csv(path,encoding='utf8',header=None)
     print(data.head())
