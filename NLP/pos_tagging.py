@@ -75,6 +75,9 @@ def generate_model_args(path,*args):
     return pi,A,B
 
 def log(v):
+    """
+    定义log方法，计算log 值
+    """
     if v == 0:
         return np.log(v+0.000001)
     return np.log(v)
@@ -126,4 +129,4 @@ if __name__ == "__main__":
     data=generate_dict(path)
     pi,A,B=generate_model_args(path,*data)
     x = "Social Security number , passport number and details about the services provided for the payment"
-    viterbi(x,pi,A,B,*data)
+    viterbi(x,pi,A,B,*data)  
