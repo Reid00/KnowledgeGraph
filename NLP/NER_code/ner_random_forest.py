@@ -1,11 +1,14 @@
-import pandas as pd
-import numpy as np
 from pathlib import Path
-from sklearn.model_selection import cross_val_predict
-from sklearn.metrics import classification_report
+
+import numpy as np
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+from sklearn.model_selection import cross_val_predict
 from sklearn.preprocessing import LabelEncoder
+
 from ner_majority_voting import MajorityVotingTagger
+
 
 def word_feature_engineer(word):
     return np.array([word.istitle(),word.islower(),word.isupper(),len(word),word.isdigit(),word.isalpha()])
@@ -92,10 +95,7 @@ def analyse_data(path):
     print(r'clean data done')
     return data
 
-# def main():
-
-
-if __name__ == "__main__":
+def main():
     root= Path.cwd()
     path = root / r'KnowledgeGraph\NLP\data\NER\ner_dataset.csv'
     data= analyse_data(path)
@@ -103,3 +103,7 @@ if __name__ == "__main__":
     tags=data['Tag'].values.tolist()
     # random_forest1(words,tags)
     random_forest2(data)
+
+
+if __name__ == "__main__":
+    main()
