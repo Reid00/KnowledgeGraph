@@ -26,6 +26,7 @@ def new_features(data):
     pos=data['POS'].values.tolist()
     tags=data['Tag'].values.tolist()
 
+    mv_tagger.fit(words,tags)
     tag_encoder.fit(tags)
     pos_encoder.fit(pos)
     sentences=get_sentences(data)
@@ -54,12 +55,13 @@ def new_features(data):
                                     tag_encoder.transform(mv_tagger.predict([sentence[i][0]])),
                                     pos_encoder.transform([p])[0], mem_tag_r, true_pos_r, mem_tag_l, true_pos_l]))
             y.append(t)
+    print('sentence features done.')
     return out,y
 
 def random_forest1(words,tags):
     """
     利用单词本身的特征用随机森林进行命名实体识别
-    结果precision 是0.88 还不如一开始的baseline majority voting
+    结果precision 是0.88 还不如一开始的baseline majority voting 0.94
     """
     word_features=[word_feature_engineer(word) for word in words]
     pred=cross_val_predict(RandomForestClassifier(n_estimators=20),X=word_features,y=tags,cv=5)
@@ -69,8 +71,9 @@ def random_forest1(words,tags):
 def random_forest2(data):
     """
     利用单词的词性的更多的特征添加模型之中
-    precision 
+    precision 0.97
     """
+    print('random_forest2 starting...')
     out,y = new_features(data)
     pred = cross_val_predict(RandomForestClassifier(n_estimators=20), X=out, y=y, cv=5)
     report = classification_report(y_pred=pred, y_true=y)
@@ -98,5 +101,5 @@ if __name__ == "__main__":
     data= analyse_data(path)
     words=data['Word'].values.tolist()
     tags=data['Tag'].values.tolist()
-    random_forest1(words,tags)
-    random_forest2(data)()
+    # random_forest1(words,tags)
+    random_forest2(data)

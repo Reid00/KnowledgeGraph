@@ -12,13 +12,17 @@ class MajorityVotingTagger(BaseEstimator,TransformerMixin):
     投票模型进行实体命名识别
     precision 最终0.94
     """
+    def __init__(self):
+        self.tags=[]
+        self.mjvote=dict()
+
     def fit(self,X,y):
         """
         X: list of words
         y: list of tag
         """
         word2cnt= dict()
-        self.tags=[]
+        # self.tags=[]
         for x, t in zip(X,y):
             if t not in self.tags:
                 self.tags.append(t)
@@ -30,7 +34,6 @@ class MajorityVotingTagger(BaseEstimator,TransformerMixin):
             else:
                 word2cnt[x] = {t:1}
 
-        self.mjvote=dict()
         for k,v in word2cnt.items():
             self.mjvote[k]=max(v,key=v.get)
 
