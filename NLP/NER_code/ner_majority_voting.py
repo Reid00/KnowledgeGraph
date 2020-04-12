@@ -62,10 +62,13 @@ def precision_report(words,tags):
     report= classification_report(y_pred=pred,y_true=tags)
     print(report)
 
-if __name__ == "__main__":
+def main():
     root= Path.cwd()
     path = root / r'KnowledgeGraph\NLP\data\NER\ner_dataset.csv'
     data= analyse_data(path)
     words=data['Word'].values.tolist()
     tags=data['Tag'].values.tolist()
     precision_report(words,tags)
+
+if __name__ == "__main__":
+    main()
