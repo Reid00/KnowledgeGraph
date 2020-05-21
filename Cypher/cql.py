@@ -26,7 +26,10 @@ class CypherExercise():
         query= 'match (p:Person) return p limit 25'
         res=self.graph.run(query).data
         print(res)
-
+        
+        #查找属性相同并且值相同的节点
+        q= 'match (n:references),(p:references) with n,p unwind keys(n) as keyn unwind keys(p) as keyp with n,p,keyn,keyp where keyp=keyn and n[keyn]<>"" return keyn,n[keyn],keyp,n[keyp] limit 2'
+        
         #删除重复节点，可用id 不同其他相同
 
         #带有关系的查询
