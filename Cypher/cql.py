@@ -1,6 +1,8 @@
 from py2neo import Node,Relationship,Graph
 import re
 
+# https://mp.weixin.qq.com/s/VIxvieiSTeGNT43YiASIlA for mysql
+
 class CypherExercise():
     graph=None
     def __init__(self):
